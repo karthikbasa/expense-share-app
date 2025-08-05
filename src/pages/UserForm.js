@@ -3,15 +3,15 @@ import React, { useState } from 'react';
 function UserForm({ setUsers, users }) {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [error, setError] = useState('');
+    const [message, setMessage] = useState('');
 
-    const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
+    const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email.trim());
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         if (!isValidEmail(email)) {
-            setError('Please enter a valid email address.');
+            setMessage('❌ Please enter a valid email address.');
             return;
         }
 
@@ -23,14 +23,12 @@ function UserForm({ setUsers, users }) {
         let updatedUsers;
 
         if (existingUserIndex !== -1) {
-            // Email exists – update user
             updatedUsers = [...users];
             updatedUsers[existingUserIndex] = { name, email };
-            setError(`✅ Updated user with email: ${email}`);
+            setMessage(`✅ Updated user with email: ${email}`);
         } else {
-            // Add new user
             updatedUsers = [...users, { name, email }];
-            setError('');
+            setMessage(`✅ Added user: ${email}`);
         }
 
         setUsers(updatedUsers);
@@ -44,53 +42,73 @@ function UserForm({ setUsers, users }) {
                 (user) => user.email.trim().toLowerCase() !== emailToDelete.trim().toLowerCase()
             );
             setUsers(updatedUsers);
+            setMessage(`🗑️ Deleted user: ${emailToDelete}`);
         }
     };
 
     return (
-        <div>
+        <section className="card">
+            <h2>Create / Update User</h2>
+
             <form onSubmit={handleSubmit}>
-                <h2>Create / Update User</h2>
+                <label htmlFor="user-name">Name:</label>
+                <input
+                    id="user-name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Full Name"
+                    required
+                />
 
-                <label>
-                    Name:
-                    <input
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                    />
-                </label>
-                <br />
+                <label htmlFor="user-email">Email:</label>
+                <input
+                    id="user-email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="name@example.com"
+                    required
+                />
 
-                <label>
-                    Email:
-                    <input
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                </label>
-                <br />
+                {message && (
+                    <p style={{
+                        marginTop: '0.5rem',
+                        color: message.includes('✅') ? 'green' : '#cc0000'
+                    }}>
+                        {message}
+                    </p>
+                )}
 
-                {error && <p style={{ color: error.includes('Updated') ? 'green' : 'red' }}>{error}</p>}
-
-                <button type="submit">Save</button>
+                <button type="submit" className="button-primary">Save</button>
             </form>
 
             <hr />
 
-            <h3>Users</h3>
+            <h3>Existing Users</h3>
             {users.length === 0 ? (
                 <p>No users added yet.</p>
             ) : (
-                users.map((user, index) => (
-                    <div key={index}>
-                        {user.name} ({user.email}){' '}
-                        <button onClick={() => handleDeleteUser(user.email)}>🗑️ Delete</button>
-                    </div>
-                ))
+                <ul>
+                    {users.map((user, index) => (
+                        <li key={index} style={{ marginBottom: '0.5rem' }}>
+                            <strong>{user.name}</strong> – {user.email}{' '}
+                            <button
+                                onClick={() => handleDeleteUser(user.email)}
+                                style={{
+                                    marginLeft: '0.5rem',
+                                    background: 'none',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    color: '#bb0000',
+                                    fontSize: '1rem'
+                                }}
+                            >
+                                🗑️
+                            </button>
+                        </li>
+                    ))}
+                </ul>
             )}
-        </div>
+        </section>
     );
 }
 
