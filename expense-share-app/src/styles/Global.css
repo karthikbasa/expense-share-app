@@ -1,0 +1,54 @@
+/* === Global.css — clean + sky blue === */
+
+/* Reset & base */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: #e0f7ff; /* soft sky blue */
+    color: #223344;            /* cool slate text */
+    line-height: 1.6;
+}
+
+/* Headings */
+h1, h2, h3 {
+    color: #005b99; /* deeper blue */
+    margin-bottom: 0.5rem;
+}
+
+/* Primary buttons */
+.button-primary {
+    background-color: #0099dd;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.button-primary:hover {
+    background-color: #007bb5;
+}
+
+/* Input fields */
+input, select {
+    padding: 6px 12px;
+    border: 1px solid #cde8f7;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+/* Card or form containers */
+.card, form {
+    background-color: #ffffff;
+    border: 1px solid #cde8f7;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
