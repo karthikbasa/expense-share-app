@@ -1,54 +1,102 @@
-/* === Global.css — clean + sky blue === */
+/* === FormiQ — Global Styles v2 === */
 
 /* Reset & base */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Inter', sans-serif;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
 }
 
 body {
+    font-family: 'Inter', sans-serif;
     background-color: #e0f7ff; /* soft sky blue */
     color: #223344;            /* cool slate text */
     line-height: 1.6;
+    padding: 2rem;
 }
 
-/* Headings */
+/* Typography */
 h1, h2, h3 {
-    color: #005b99; /* deeper blue */
-    margin-bottom: 0.5rem;
+    color: #005b99;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.5px;
 }
 
-/* Primary buttons */
+p {
+    margin-bottom: 1rem;
+    color: #334455;
+    font-size: 1rem;
+}
+
+/* Layout container */
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+/* Buttons */
 .button-primary {
+    display: inline-block;
     background-color: #0099dd;
     color: #fff;
-    padding: 8px 16px;
+    padding: 10px 20px;
     border: none;
     border-radius: 6px;
     font-weight: 600;
+    text-align: center;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .button-primary:hover {
     background-color: #007bb5;
+    transform: scale(1.05);
 }
 
-/* Input fields */
-input, select {
-    padding: 6px 12px;
+/* Inputs & Selects */
+input[type="text"],
+select {
+    display: block;
+    width: 100%;
+    padding: 10px 14px;
+    margin-bottom: 1rem;
     border: 1px solid #cde8f7;
     border-radius: 4px;
-    background-color: #fff;
+    background-color: #ffffff;
+    font-size: 1rem;
+    transition: box-shadow 0.2s ease;
 }
 
-/* Card or form containers */
-.card, form {
+input:focus,
+select:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0,153,221,0.2);
+}
+
+/* Form & Card Containers */
+.card,
+form {
     background-color: #ffffff;
     border: 1px solid #cde8f7;
-    padding: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+}
+
+/* Utility: status badge */
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    font-size: 0.875rem;
+    border-radius: 4px;
+    background-color: #d0f0ff;
+    color: #005b99;
+    font-weight: 500;
 }

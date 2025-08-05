@@ -1,55 +1,97 @@
 import React, { useState } from 'react';
 
 function UserForm({ setUsers, users }) {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [error, setError] = useState('');
 
-  const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
+    const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+    const handleSubmit = (e) => {
+        e.preventDefault();
 
-    if (!isValidEmail(email)) {
-      setError('Please enter a valid email address.');
-      return;
-    }
+        if (!isValidEmail(email)) {
+            setError('Please enter a valid email address.');
+            return;
+        }
 
-    setUsers([...users, { name, email }]);
-    setName('');
-    setEmail('');
-    setError('');
-  };
+        const trimmedEmail = email.trim().toLowerCase();
+        const existingUserIndex = users.findIndex(
+            (user) => user.email.trim().toLowerCase() === trimmedEmail
+        );
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <h2>Create User</h2>
+        let updatedUsers;
 
-      <label>
-        Name:
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-      </label>
-      <br />
+        if (existingUserIndex !== -1) {
+            // Email exists – update user
+            updatedUsers = [...users];
+            updatedUsers[existingUserIndex] = { name, email };
+            setError(`✅ Updated user with email: ${email}`);
+        } else {
+            // Add new user
+            updatedUsers = [...users, { name, email }];
+            setError('');
+        }
 
-      <label>
-        Email:
-        <input
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </label>
-      <br />
+        setUsers(updatedUsers);
+        setName('');
+        setEmail('');
+    };
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    const handleDeleteUser = (emailToDelete) => {
+        if (window.confirm(`Are you sure you want to delete ${emailToDelete}?`)) {
+            const updatedUsers = users.filter(
+                (user) => user.email.trim().toLowerCase() !== emailToDelete.trim().toLowerCase()
+            );
+            setUsers(updatedUsers);
+        }
+    };
 
-      <button type="submit">Create</button>
-    </form>
-  );
+    return (
+        <div>
+            <form onSubmit={handleSubmit}>
+                <h2>Create / Update User</h2>
+
+                <label>
+                    Name:
+                    <input
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                    />
+                </label>
+                <br />
+
+                <label>
+                    Email:
+                    <input
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                </label>
+                <br />
+
+                {error && <p style={{ color: error.includes('Updated') ? 'green' : 'red' }}>{error}</p>}
+
+                <button type="submit">Save</button>
+            </form>
+
+            <hr />
+
+            <h3>Users</h3>
+            {users.length === 0 ? (
+                <p>No users added yet.</p>
+            ) : (
+                users.map((user, index) => (
+                    <div key={index}>
+                        {user.name} ({user.email}){' '}
+                        <button onClick={() => handleDeleteUser(user.email)}>🗑️ Delete</button>
+                    </div>
+                ))
+            )}
+        </div>
+    );
 }
 
 export default UserForm;

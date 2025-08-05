@@ -1,0 +1,12 @@
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 32px 16px;
+    background-color: #f8f9fc;
+    border-bottom: 1px solid #ddd;
+}
+
+.logo {
+    height: 100px; /* You can experiment with up to 100px if needed */
+}
