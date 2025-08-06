@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/expense-share-app/static/css/main.1668f22f.css",
-    "main.js": "/expense-share-app/static/js/main.4a381b78.js",
-    "static/media/formiq-logo.png": "/expense-share-app/static/media/formiq-logo.318e7b26170140f146f6.png",
+    "main.css": "/expense-share-app/static/css/main.56884603.css",
+    "main.js": "/expense-share-app/static/js/main.c75d3566.js",
+    "static/media/splitzy-logo.png": "/expense-share-app/static/media/splitzy-logo.dd687acb2e0de94b3814.png",
     "index.html": "/expense-share-app/index.html",
-    "main.1668f22f.css.map": "/expense-share-app/static/css/main.1668f22f.css.map",
-    "main.4a381b78.js.map": "/expense-share-app/static/js/main.4a381b78.js.map"
+    "main.56884603.css.map": "/expense-share-app/static/css/main.56884603.css.map",
+    "main.c75d3566.js.map": "/expense-share-app/static/js/main.c75d3566.js.map"
   },
   "entrypoints": [
-    "static/css/main.1668f22f.css",
-    "static/js/main.4a381b78.js"
+    "static/css/main.56884603.css",
+    "static/js/main.c75d3566.js"
   ]
 }
