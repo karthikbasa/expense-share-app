@@ -5,9 +5,13 @@ import Summary from './pages/Summary';
 import UserForm from './pages/UserForm';
 import UserList from './pages/UserList';
 import GroupDetail from './pages/GroupDetail';
-import GroupForm from './components/GroupForm'; // 👈 Add this!
+import Privacy from './pages/Privacy';
+import Terms from './pages/Terms';
+import GroupForm from './components/GroupForm';
 import Header from './components/Header';
 import { getUsers, saveUsers } from './utils/storage';
+import Footer from './components/Footer';
+import './App.css';
 
 function App() {
     const [users, setUsers] = useState(null);
@@ -26,26 +30,34 @@ function App() {
 
     return (
         <HashRouter>
-            <Header />
+            <div className="app-container">
+                <Header />
 
-            <Routes>
-                {!isLoading && (
-                    <>
-                        <Route path="/" element={<Home users={users} />} />
-                        <Route
-                            path="/create-user"
-                            element={<UserForm setUsers={setUsers} users={users} />}
-                        />
-                        <Route
-                            path="/create-group"
-                            element={<GroupForm users={users} />}
-                        />
-                        <Route path="/view-users" element={<UserList users={users} />} />
-                        <Route path="/group/:name" element={<GroupDetail />} />
-                    </>
-                )}
-                <Route path="/summary" element={<Summary />} />
-            </Routes>
+                <main className="main-content">
+                    <Routes>
+                        {!isLoading && (
+                            <>
+                                <Route path="/" element={<Home users={users} />} />
+                                <Route
+                                    path="/create-user"
+                                    element={<UserForm setUsers={setUsers} users={users} />}
+                                />
+                                <Route
+                                    path="/create-group"
+                                    element={<GroupForm users={users} />}
+                                />
+                                <Route path="/view-users" element={<UserList users={users} />} />
+                                <Route path="/group/:name" element={<GroupDetail />} />
+                            </>
+                        )}
+                        <Route path="/summary" element={<Summary />} />
+                        <Route path="/privacy" element={<Privacy />} />
+                        <Route path="/terms" element={<Terms />} />
+                    </Routes>
+                </main>
+
+                <Footer />
+            </div>
         </HashRouter>
     );
 }

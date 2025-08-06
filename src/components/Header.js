@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './Header.css';
-import logo from '../assets/formiq-logo.png';
+import logo from '../assets/splitzy-logo.png';
 
 function Header({ contextStatus }) {
     const location = useLocation();
@@ -16,9 +16,9 @@ function Header({ contextStatus }) {
     return (
         <header className="header">
             <div className="logo-section">
-                <img src={logo} alt="FormiQ Logo" className="logo" />
+                <img src={logo} alt="Splitzy Logo" className="logo" />
                 <p className="logo-description">
-                    Track. Split. Settle. ✨ Your expenses, made human.
+                    Split expenses with ease
                 </p>
                 {contextStatus && (
                     <div className="context-status">
