@@ -2,6 +2,10 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## 🔗 Live Demo
+
+[![Live Demo](https://img.shields.io/badge/View-Demo-blue)](https://karthikbasa.github.io/expense-share-app/#/)
+
 ## Available Scripts
 
 In the project directory, you can run:
