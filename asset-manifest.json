@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/formiq/static/css/main.1668f22f.css",
+    "main.js": "/formiq/static/js/main.c3da7d74.js",
+    "static/media/formiq-logo.png": "/formiq/static/media/formiq-logo.318e7b26170140f146f6.png",
+    "index.html": "/formiq/index.html",
+    "main.1668f22f.css.map": "/formiq/static/css/main.1668f22f.css.map",
+    "main.c3da7d74.js.map": "/formiq/static/js/main.c3da7d74.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1668f22f.css",
+    "static/js/main.c3da7d74.js"
+  ]
+}
