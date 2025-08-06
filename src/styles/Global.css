@@ -22,15 +22,15 @@ body {
 
 /* Typography */
 h1, h2, h3 {
+    margin-top: 24px;
+    margin-bottom: 12px;
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
     color: #005b99;
-    margin-bottom: 0.75rem;
-    letter-spacing: -0.5px;
 }
 
 p {
-    margin-bottom: 1rem;
-    color: #334455;
     font-size: 1rem;
+    margin-bottom: 1rem;
 }
 
 /* Layout container */
@@ -99,4 +99,31 @@ form {
     background-color: #d0f0ff;
     color: #005b99;
     font-weight: 500;
+}
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #e0f7ff;
+    color: #223344;
+    line-height: 1.6;
+    padding: 0;
+    margin: 0;
+}
+
+/* Optional: smooth scroll for tab transitions */
+html {
+    scroll-behavior: smooth;
+}
+section.card {
+    padding: 24px 32px;
+    margin: 20px 0;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    margin: 32px 0;
 }
