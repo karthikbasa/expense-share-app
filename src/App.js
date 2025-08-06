@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Summary from './pages/Summary';
 import UserForm from './pages/UserForm';
@@ -25,7 +25,7 @@ function App() {
     }, [users]);
 
     return (
-        <BrowserRouter>
+        <HashRouter>
             <Header />
 
             <Routes>
@@ -46,7 +46,7 @@ function App() {
                 )}
                 <Route path="/summary" element={<Summary />} />
             </Routes>
-        </BrowserRouter>
+        </HashRouter>
     );
 }
 
