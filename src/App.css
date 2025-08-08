@@ -45,3 +45,52 @@
 .main-content {
     flex: 1;
 }
+
+
+.expense-form {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 400px;
+}
+
+.expense-form input,
+.expense-form select {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.expense-form label {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.form-hint {
+    font-size: 0.85rem;
+    color: #a00;
+    margin-top: -0.5rem;
+}
+
+.expense-form-wrapper {
+    background: #eef;
+    border: 2px dashed #88f;
+}
+
+.expense-list {
+    margin-top: 1rem;
+    padding-left: 1rem;
+}
+
+.empty-expense {
+    margin-top: 1rem;
+    color: #777;
+}
+.card {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.05);
+}

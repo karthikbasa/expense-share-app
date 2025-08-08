@@ -124,7 +124,7 @@ function GroupDetail() {
 
                     <h3>Expenses</h3>
                     {group.expenses?.length > 0 ? (
-                        <ul>
+                        <ul className="expense-list">
                             {group.expenses.map((expense, index) => (
                                 <li key={index}>
                                     <strong>{expense.title}</strong> — ₹{expense.amount} by {expense.paidBy}
@@ -132,14 +132,27 @@ function GroupDetail() {
                             ))}
                         </ul>
                     ) : (
-                        <p><em>No expenses added yet.</em></p>
+                        <p className="empty-expense"><em>No expenses added yet.</em></p>
                     )}
 
                     {group.status !== "settled" ? (
-                        <ExpenseForm group={group} onExpenseAdded={refreshGroup} />
+                        <div
+                            style={{
+                                marginTop: '2rem',
+                                padding: '1rem',
+                                background: '#f6f6f6',
+                                borderRadius: '8px',
+                                boxShadow: '0 0 4px rgba(0,0,0,0.05)',
+                            }}
+                        >
+                            <h4 style={{ marginBottom: '1rem' }}>Add New Expense</h4>
+                            <ExpenseForm group={group} onExpenseAdded={refreshGroup} />
+                        </div>
+
                     ) : (
                         <p><em>Expense entry disabled for settled groups.</em></p>
                     )}
+
 
                     <h3>Group Summary</h3>
                     <p><strong>Total Spend:</strong> ₹{summary.totalSpend}</p>
