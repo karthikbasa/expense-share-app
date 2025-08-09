@@ -3,16 +3,30 @@ import { supabase } from '../supabaseClient';
 
 export default function Account() {
     const [user, setUser] = useState(null);
+    const [lastLogin, setLastLogin] = useState('');
     const [message, setMessage] = useState('');
 
     useEffect(() => {
-        supabase.auth.getUser().then(({ data }) => {
-            setUser(data?.user || null);
-        });
+        const fetchUserAndSession = async () => {
+            const { data: userData } = await supabase.auth.getUser();
+            setUser(userData?.user || null);
+
+            const { data: sessionData } = await supabase.auth.getSession();
+            const loginTime = sessionData?.session?.created_at;
+            if (loginTime) {
+                const formatted = new Date(loginTime).toLocaleString('en-IN', {
+                    dateStyle: 'medium',
+                    timeStyle: 'short'
+                });
+                setLastLogin(formatted);
+            }
+        };
+
+        fetchUserAndSession();
     }, []);
 
     const handlePasswordReset = async () => {
-        const { data, error } = await supabase.auth.resetPasswordForEmail(user.email);
+        const { error } = await supabase.auth.resetPasswordForEmail(user.email);
         if (error) {
             setMessage('Unable to send reset email. Please try again.');
         } else {
@@ -30,7 +44,6 @@ export default function Account() {
 
     return (
         <div style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
-
             <div style={{
                 background: '#f9f9f9',
                 padding: '1.5rem',
@@ -66,10 +79,11 @@ export default function Account() {
             </div>
 
             <div style={{ marginTop: '2rem', color: '#444' }}>
+                <h3 style={{ fontWeight: '500' }}>Account Summary</h3>
                 <ul style={{ marginTop: '0.5rem', paddingLeft: '1rem' }}>
                     <li>Groups joined: (coming soon)</li>
                     <li>Expenses tracked: (coming soon)</li>
-                    <li>Last login: (coming soon)</li>
+                    <li>Last login: {lastLogin || 'Unavailable'}</li>
                 </ul>
             </div>
         </div>

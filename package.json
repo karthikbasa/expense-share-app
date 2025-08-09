@@ -18,11 +18,10 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "preinstall": "npx npm-force-resolutions",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
     "postbuild": "cp build/index.html build/404.html",
-    "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build --nojekyll"
@@ -47,10 +46,12 @@
   },
   "devDependencies": {
     "gh-pages": "^6.3.0",
-    "npm-force-resolutions": "^0.0.10"
+    "react-app-rewired": "^2.2.1"
   },
   "resolutions": {
     "react": "19.1.1",
-    "react-dom": "19.1.1"
+    "react-dom": "19.1.1",
+    "minimist": "^1.2.6",
+    "lodash": "^4.17.21"
   }
 }
