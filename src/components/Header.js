@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { supabase } from '../supabaseClient';
 import './Header.css';
 import logo from '../assets/splitzy-logo.png';
 
-function Header({ contextStatus }) {
+function Header({ contextStatus, session }) {
     const location = useLocation();
 
     const tabs = [
@@ -12,6 +13,10 @@ function Header({ contextStatus }) {
         { label: 'Create Group', path: '/create-group' },
         { label: 'View Users', path: '/view-users' },
     ];
+
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
+    };
 
     return (
         <header className="header">
@@ -37,7 +42,24 @@ function Header({ contextStatus }) {
                         {tab.label}
                     </Link>
                 ))}
+                {session && (
+                    <Link
+                        to="/account"
+                        className={`nav-tab ${location.pathname === '/account' ? 'active' : ''}`}
+                    >
+                        My Account
+                    </Link>
+                )}
             </nav>
+
+            {session && (
+                <div className="user-session">
+                    <span className="user-email">{session.user.email}</span>
+                    <button className="logout-button" onClick={handleLogout}>
+                        Logout
+                    </button>
+                </div>
+            )}
         </header>
     );
 }

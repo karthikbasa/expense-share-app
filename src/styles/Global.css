@@ -127,3 +127,10 @@ section.card {
     gap: 2rem;
     margin: 32px 0;
 }
+.auth-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f9f9f9;
+}

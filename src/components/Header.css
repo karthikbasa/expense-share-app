@@ -70,3 +70,29 @@
     color: #333;
     font-weight: 500;
 }
+.user-session {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: auto;
+    padding-right: 1rem;
+}
+
+.user-email {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.logout-button {
+    background: none;
+    border: 1px solid #ccc;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.logout-button:hover {
+    background: #f0f0f0;
+}
