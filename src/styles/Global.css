@@ -142,3 +142,30 @@ section.card {
     min-height: 100vh;
     background: #f9f9f9;
 }
+
+@media (max-width: 600px) {
+    .container {
+        padding: 1rem;
+    }
+
+    h1, h2, h3 {
+        font-size: clamp(1.5rem, 5vw, 2rem);
+    }
+
+    .grid-layout {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .nav-tabs {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .user-session {
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem 0;
+    }
+}
+
