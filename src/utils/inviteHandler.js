@@ -19,7 +19,7 @@ export async function handlePostSignup() {
         .select('*')
         .eq('email', email)
         .eq('status', 'pending')
-        .single();
+        .maybeSingle();
 
     if (inviteError || !invite) {
         console.log("✅ No pending invite found for:", email);

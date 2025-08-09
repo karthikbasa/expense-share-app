@@ -30,7 +30,7 @@ export default function Account() {
                     .select('*')
                     .eq('email', currentUser.email)
                     .eq('status', 'pending')
-                    .single();
+                    .maybeSingle();
 
                 if (invite && !inviteError) {
                     const name = currentUser.user_metadata?.full_name || 'New User';

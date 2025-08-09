@@ -5,12 +5,7 @@ import { getGroupSummary } from '../utils/groupMath';
 import calculateSettlements from '../utils/settlements';
 import ExpenseForm from '../components/ExpenseForm';
 import AddUserToGroupForm from '../components/AddUserToGroupForm';
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-    process.env.REACT_APP_SUPABASE_URL,
-    process.env.REACT_APP_SUPABASE_ANON_KEY
-);
+import { supabase } from '../supabaseClient';
 
 function GroupDetail() {
     const { name } = useParams();
@@ -70,20 +65,42 @@ function GroupDetail() {
         setVersion((v) => v + 1);
     };
 
-    const handleSettleGroup = () => {
+    const handleSettleGroup = async () => {
         if (!window.confirm("This will mark the group as settled and lock further edits. Proceed?")) return;
 
-        const groups = JSON.parse(localStorage.getItem("expenseGroups")) || [];
+        if (!group?.id) {
+            console.error("Group ID missing. Cannot settle.");
+            return;
+        }
+
         const now = new Date().toISOString();
 
-        const updatedGroups = groups.map((g) =>
-            g.name.trim().toLowerCase() === name.trim().toLowerCase()
-                ? { ...g, status: "settled", settledAt: now }
-                : g
-        );
+        // 1. Update group status in Supabase
+        const { error: updateError } = await supabase
+            .from('groups')
+            .update({ status: 'settled', settled_at: now })
+            .eq('id', group.id);
 
-        localStorage.setItem("expenseGroups", JSON.stringify(updatedGroups));
-        setVersion((v) => v + 1);
+        if (updateError) {
+            console.error("Error settling group:", updateError);
+            return;
+        }
+
+        // 2. Insert system note into expenses
+        const { error: insertError } = await supabase.from('expenses').insert([{
+            group_id: group.id,
+            title: 'Group settled',
+            amount: 0,
+            paid_by: 'system',
+            created_at: now
+        }]);
+
+        if (insertError) {
+            console.error("Error inserting system note:", insertError);
+        }
+
+        // 3. Refresh group data
+        await refreshGroup();
     };
 
     const getStatusEmoji = (status) => {
