@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { addExpenseToGroup } from '../utils/storage';
+import { addExpenseToGroup } from '../utils/storage'; // ✅ using your storage file
 
 function ExpenseForm({ group, onExpenseAdded }) {
     const [title, setTitle] = useState('');
@@ -25,14 +25,17 @@ function ExpenseForm({ group, onExpenseAdded }) {
         setIsSubmitting(true);
 
         try {
+            const paidUser = safeUsers.find(u => u.email === paidBy);
+            const paidByName = paidUser?.name || paidBy;
+
             const expense = {
                 title: trimmedTitle,
                 amount: parsedAmount,
-                paidBy,
-                createdAt: new Date().toISOString(),
+                paid_by: paidBy
             };
 
-            await addExpenseToGroup(group.name, expense);
+            // ✅ Pass group.id instead of group.name
+            await addExpenseToGroup(group.id, expense);
 
             setTitle('');
             setAmount('');

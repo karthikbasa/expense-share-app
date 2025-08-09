@@ -13,6 +13,12 @@ export async function getGroups() {
             group_members (
                 name,
                 email
+            ),
+            expenses (
+                title,
+                amount,
+                paid_by,
+                created_at
             )
         `)
         .order('created_at', { ascending: false });
@@ -22,10 +28,10 @@ export async function getGroups() {
         return [];
     }
 
-    // Rename group_members to users for consistency
     const enriched = data.map(group => ({
         ...group,
-        users: group.group_members
+        users: group.group_members,
+        expenses: (group.expenses || []).sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
     }));
 
     return enriched;
@@ -147,19 +153,11 @@ export async function saveUsers(users) {
 }
 
 // Add an expense to a specific group
-export async function addExpenseToGroup(groupName, expense) {
-    const { data: groupData, error: groupError } = await supabase
-        .from('groups')
-        .select('id')
-        .eq('name', groupName)
-        .single();
-
-    if (groupError || !groupData) {
-        console.error('Group not found:', groupError);
+export async function addExpenseToGroup(groupId, expense) {
+    if (!groupId) {
+        console.error('Missing group ID for expense insert.');
         return;
     }
-
-    const groupId = groupData.id;
 
     const { error: expenseError } = await supabase
         .from('expenses')
@@ -169,6 +167,7 @@ export async function addExpenseToGroup(groupName, expense) {
         console.error('Error adding expense:', expenseError);
     }
 }
+
 
 // Save all groups directly (overwrite logic not recommended with Supabase)
 export async function saveGroups(groups) {

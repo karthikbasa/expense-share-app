@@ -21,8 +21,7 @@ function Summary() {
 
     const formatDate = (isoString) => {
         if (!isoString) return '';
-        const date = new Date(isoString);
-        return date.toLocaleString();
+        return new Date(isoString).toLocaleDateString();
     };
 
     return (
@@ -32,7 +31,13 @@ function Summary() {
                 <p><strong>Status:</strong> {status}</p>
 
                 {status === "settled" && (
-                    <div style={{ marginBottom: "1rem", padding: "0.5rem", backgroundColor: "#f0f0f0", borderRadius: "4px", color: "#444" }}>
+                    <div style={{
+                        marginBottom: "1rem",
+                        padding: "0.5rem",
+                        backgroundColor: "#f0f0f0",
+                        borderRadius: "4px",
+                        color: "#444"
+                    }}>
                         🎉 This group was settled on: <strong>{formatDate(settledAt)}</strong>
                     </div>
                 )}
@@ -42,15 +47,14 @@ function Summary() {
 
                 <h3>Individual Balances</h3>
                 <ul>
-                    {summary.balances.map((b) => {
-                        const balanceStatus = b.owes > 0
-                            ? `Owes ₹${b.owes.toFixed(2)}`
-                            : b.getsBack > 0
-                                ? `Gets back ₹${b.getsBack.toFixed(2)}`
-                                : 'Settled';
+                    {summary.balances.map((b, idx) => {
+                        const balanceStatus =
+                            b.owes > 0 ? `Owes ₹${b.owes.toFixed(2)}` :
+                                b.getsBack > 0 ? `Gets back ₹${b.getsBack.toFixed(2)}` :
+                                    'Settled';
 
                         return (
-                            <li key={b.email}>
+                            <li key={b.email || idx}>
                                 {b.name} paid ₹{b.paid}. {balanceStatus}.
                             </li>
                         );
@@ -60,7 +64,9 @@ function Summary() {
                 <h3>Who Owes Whom</h3>
                 {settlements.length > 0 ? (
                     <ul>
-                        {settlements.map((line, idx) => <li key={idx}>{line}</li>)}
+                        {settlements.map((line, idx) => (
+                            <li key={idx}>{line}</li>
+                        ))}
                     </ul>
                 ) : (
                     <p><em>All expenses are settled.</em></p>

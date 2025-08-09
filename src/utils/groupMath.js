@@ -9,8 +9,8 @@ export function getGroupSummary(group) {
   const contributions = {};
   userEmails.forEach((email) => (contributions[email] = 0));
   expenses.forEach((e) => {
-    if (contributions[e.paidBy] !== undefined) {
-      contributions[e.paidBy] += e.amount;
+    if (contributions[e.paid_by] !== undefined) {
+      contributions[e.paid_by] += e.amount;
     }
   });
 
@@ -18,18 +18,20 @@ export function getGroupSummary(group) {
   const sharePerUser = totalSpend / userEmails.length;
 
   // Owes or gets
-  const balances = userEmails.map((email) => {
-    const delta = contributions[email] - sharePerUser;
-    return {
-      email,
-      name: group.users.find((u) => u.email === email)?.name || email,
-      paid: contributions[email],
-      owes: delta < 0 ? Math.abs(delta) : 0,
-      getsBack: delta > 0 ? delta : 0,
-    };
-  });
+    const balances = userEmails.map((email) => {
+        const paid = contributions[email] || 0;
+        const delta = paid - sharePerUser;
 
-  return {
+        return {
+            email,
+            name: group.users.find((u) => u.email === email)?.name || email,
+            paid,
+            owes: delta < 0 ? Math.abs(delta) : 0,
+            getsBack: delta > 0 ? delta : 0,
+        };
+    });
+
+    return {
     totalSpend,
     sharePerUser,
     balances,

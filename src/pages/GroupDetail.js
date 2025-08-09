@@ -188,7 +188,9 @@ function GroupDetail() {
                     <ul>
                         {expenses.map((expense, index) => (
                             <li key={index}>
-                                <strong>{expense.title}</strong> — ₹{expense.amount} by {expense.paidBy}
+                                <strong>{expense.title}</strong> — ₹{expense.amount} by {expense.paid_by}
+                                <br />
+                                <small><em>{new Date(expense.created_at).toLocaleDateString()}</em></small>
                             </li>
                         ))}
                     </ul>

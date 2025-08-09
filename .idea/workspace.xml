@@ -5,18 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bcda1f29-d18e-4f45-b302-bb39c860ad60" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/utils/inviteHandler.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddUserToGroupForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddUserToGroupForm.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ExpenseForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ExpenseForm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/GroupCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GroupCard.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/GroupForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GroupForm.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Account.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Account.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/GroupDetail.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/GroupDetail.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Home.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/UserForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/UserForm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/UserList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/UserList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Summary.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Summary.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/groupMath.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/groupMath.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/settlements.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/settlements.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utils/storage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/storage.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -41,7 +35,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;supadb&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/nirvana/IdeaProjects/expense-share-app/src/assets&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -85,6 +79,7 @@
       <workItem from="1754540000520" duration="1664000" />
       <workItem from="1754573383369" duration="599000" />
       <workItem from="1754623764440" duration="1312000" />
+      <workItem from="1754743870930" duration="2204000" />
     </task>
     <servers />
   </component>
