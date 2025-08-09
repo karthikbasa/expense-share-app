@@ -1,4 +1,4 @@
-/* Reset & base */
+/* === Global Reset & Base === */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -12,17 +12,17 @@ html {
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #e0f7ff; /* soft sky blue */
-    color: #223344;            /* cool slate text */
+    background-color: #e0f7ff;
+    color: #223344;
     line-height: 1.6;
-    padding: 1.5rem;            /* reduced for mobile breathing room */
+    padding: 1.5rem;
 }
 
-/* Typography */
+/* === Typography === */
 h1, h2, h3 {
     margin-top: 1.5rem;
     margin-bottom: 0.75rem;
-    font-size: clamp(1.5rem, 5vw, 2.25rem); /* slightly softened scale */
+    font-size: clamp(1.5rem, 5vw, 2.25rem);
     color: #005b99;
     line-height: 1.3;
 }
@@ -30,22 +30,22 @@ h1, h2, h3 {
 p {
     font-size: 1rem;
     margin-bottom: 1rem;
-    max-width: 65ch; /* readable line length */
+    max-width: 65ch;
 }
 
-/* Layout container */
+/* === Layout Container === */
 .container {
     max-width: 960px;
     margin: 0 auto;
     padding: 1rem;
 }
 
-/* Buttons */
+/* === Buttons === */
 .button-primary {
     display: inline-block;
     background-color: #0099dd;
     color: #fff;
-    padding: 0.75rem 1.25rem; /* touch-friendly */
+    padding: 0.75rem 1.25rem;
     border: none;
     border-radius: 6px;
     font-weight: 600;
@@ -60,7 +60,7 @@ p {
     transform: scale(1.05);
 }
 
-/* Inputs & Selects */
+/* === Inputs & Selects === */
 input[type="text"],
 select {
     display: block;
@@ -80,7 +80,7 @@ select:focus {
     box-shadow: 0 0 0 2px rgba(0,153,221,0.2);
 }
 
-/* Form & Card Containers */
+/* === Form & Card Containers === */
 .card,
 form {
     background-color: #ffffff;
@@ -91,7 +91,7 @@ form {
     margin-bottom: 2rem;
 }
 
-/* Utility: status badge */
+/* === Utility: Status Badge === */
 .badge {
     display: inline-block;
     padding: 0.25rem 0.5rem;
@@ -102,7 +102,7 @@ form {
     font-weight: 500;
 }
 
-/* Section card refinement */
+/* === Section Card Refinement === */
 section.card {
     padding: 1.5rem 2rem;
     margin: 1.25rem 0;
@@ -111,7 +111,7 @@ section.card {
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-/* Grid layout */
+/* === Grid Layout === */
 .grid-layout {
     display: grid;
     grid-template-columns: 1fr;
@@ -134,7 +134,7 @@ section.card {
     }
 }
 
-/* Auth wrapper */
+/* === Auth Wrapper === */
 .auth-wrapper {
     display: flex;
     justify-content: center;
@@ -157,15 +157,7 @@ section.card {
         gap: 1rem;
     }
 
-    .nav-tabs {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .user-session {
-        flex-direction: column;
-        align-items: center;
-        padding: 1rem 0;
+    .card {
+        padding: 1rem;
     }
 }
-

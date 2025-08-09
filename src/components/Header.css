@@ -9,17 +9,31 @@
     border-bottom: 1px solid #ddd;
 }
 
-/* Logo & Description */
-.logo {
-    height: 64px; /* slightly reduced for mobile */
-    margin-bottom: 0.75rem;
-}
-
+/* === Logo Section === */
 .logo-section {
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 0.75rem;
     padding-bottom: 0.5rem;
+    width: 100%;
+}
+
+/* Logo + Description + Context */
+.logo-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logo {
+    height: 64px;
+    margin-bottom: 0.75rem;
+}
+
+.logo-meta {
+    text-align: center;
 }
 
 .logo-description {
@@ -29,7 +43,6 @@
     margin-top: 0.25rem;
 }
 
-/* Contextual Status */
 .context-status {
     margin-top: 0.4rem;
     font-size: 0.85rem;
@@ -37,16 +50,21 @@
     font-weight: 500;
 }
 
-/* Navigation Tabs */
+/* === Navigation Tabs === */
 .nav-tabs {
     display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    row-gap: 0.5rem;
-    border-bottom: 2px solid #cde8f7;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    gap: 0.75rem;
     padding-bottom: 0.5rem;
-    justify-content: center;
     width: 100%;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.nav-tabs::-webkit-scrollbar {
+    display: none;
 }
 
 .nav-tab {
@@ -57,6 +75,8 @@
     border-radius: 4px 4px 0 0;
     transition: background-color 0.3s ease, color 0.3s ease;
     font-size: 0.95rem;
+    flex: 0 0 auto;
+    white-space: nowrap;
 }
 
 .nav-tab:hover {
@@ -66,7 +86,7 @@
 
 .nav-tab:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(0,153,221,0.3);
+    box-shadow: 0 0 0 3px rgba(0, 153, 221, 0.3);
 }
 
 .nav-tab.active {
@@ -78,24 +98,21 @@
     box-shadow: 0 -2px 6px rgba(0, 153, 221, 0.05);
 }
 
-/* User Session Info */
+/* === User Session === */
 .user-session {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 0.75rem;
-    margin-left: auto;
-    padding-right: 1rem;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 1rem;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
 }
 
+/* === Logout Button === */
 .user-email {
     font-size: 0.875rem;
     color: #555;
 }
 
-/* Logout Button */
 .logout-button {
     background: none;
     border: 1px solid #ccc;
@@ -108,4 +125,36 @@
 
 .logout-button:hover {
     background: #f0f0f0;
+}
+
+/* === Desktop Layout Override === */
+@media (min-width: 600px) {
+    .logo-section {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 1rem;
+    }
+
+    .logo-wrapper {
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .logo-meta {
+        text-align: center;
+    }
+
+    .user-session {
+        flex-direction: row;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 0;
+    }
+
+    .logout-button {
+        font-size: 0.85rem;
+        padding: 0.5rem 1rem;
+    }
 }

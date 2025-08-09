@@ -21,16 +21,29 @@ function Header({ contextStatus, session }) {
     return (
         <header className="header">
             <div className="logo-section">
-                <img src={logo} alt="Splitzy Logo" className="logo" />
-                <p className="logo-description">
-                    Split expenses with ease
-                </p>
-                {contextStatus && (
-                    <div className="context-status">
-                        <p>{contextStatus}</p>
+                <div className="logo-wrapper">
+                    <img src={logo} alt="Splitzy Logo" className="logo" />
+                    <div className="logo-meta">
+                        <p className="logo-description">Split expenses with ease</p>
+                        {contextStatus && (
+                            <div className="context-status">
+                                <p>{contextStatus}</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {session && (
+                    <div className="user-session">
+                        <span className="user-email">{session.user.email}</span>
+                        <button className="logout-button" onClick={handleLogout}>
+                            Logout
+                        </button>
                     </div>
                 )}
             </div>
+
+
 
             <nav className="nav-tabs">
                 {tabs.map(tab => (
@@ -51,15 +64,6 @@ function Header({ contextStatus, session }) {
                     </Link>
                 )}
             </nav>
-
-            {session && (
-                <div className="user-session">
-                    <span className="user-email">{session.user.email}</span>
-                    <button className="logout-button" onClick={handleLogout}>
-                        Logout
-                    </button>
-                </div>
-            )}
         </header>
     );
 }
