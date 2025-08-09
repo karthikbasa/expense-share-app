@@ -1,16 +1,17 @@
 import React from 'react';
 
 function UserList({ users }) {
-    const sortedUsers = users
-        .slice()
-        .sort((a, b) => a.name.localeCompare(b.name));
+    const validUsers = Array.isArray(users) ? users : [];
+    const sortedUsers = validUsers.slice().sort((a, b) =>
+        a.name.localeCompare(b.name)
+    );
 
     return (
         <div className="grid-layout">
             <section className="card">
                 <h2>All Users</h2>
                 {sortedUsers.length === 0 ? (
-                    <p>No users added yet.</p>
+                    <p><em>No users added yet. Try creating one to begin.</em></p>
                 ) : (
                     <ul>
                         {sortedUsers.map((user, index) => (

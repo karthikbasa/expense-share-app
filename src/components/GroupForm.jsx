@@ -1,24 +1,53 @@
 import React, { useState } from 'react';
-import { addGroup } from '../utils/storage';
+import { addGroup, getGroups } from '../utils/storage';
 
 function GroupForm({ onGroupCreated, users }) {
     const [groupName, setGroupName] = useState('');
     const [selectedUserEmails, setSelectedUserEmails] = useState([]);
     const [status, setStatus] = useState('active');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState(null);
 
-    const handleSubmit = (e) => {
+    const validUsers = Array.isArray(users) ? users : [];
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!groupName.trim()) return;
+        setError(null);
 
-        const selectedUsers = users.filter(user =>
-            selectedUserEmails.includes(user.email)
-        );
+        const trimmedName = groupName.trim();
+        if (!trimmedName) {
+            setError('Group name is required.');
+            return;
+        }
 
-        addGroup(groupName.trim(), selectedUsers, status);
-        setGroupName('');
-        setSelectedUserEmails([]);
-        setStatus('active');
-        if (onGroupCreated) onGroupCreated(); // optional callback
+        setIsSubmitting(true);
+
+        try {
+            // Optional: prevent duplicate group names
+            const existingGroups = await getGroups();
+            const nameExists = Array.isArray(existingGroups)
+                ? existingGroups.some(g => g.name.trim().toLowerCase() === trimmedName.toLowerCase())
+                : false;
+
+            if (nameExists) {
+                setError('A group with this name already exists.');
+                setIsSubmitting(false);
+                return;
+            }
+
+            await addGroup(trimmedName, selectedUserEmails, status);
+
+            setGroupName('');
+            setSelectedUserEmails([]);
+            setStatus('active');
+
+            if (onGroupCreated) onGroupCreated();
+        } catch (err) {
+            console.error('Error creating group:', err);
+            setError('Failed to create group. Please try again.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleUserSelect = (e) => {
@@ -39,21 +68,27 @@ function GroupForm({ onGroupCreated, users }) {
                     placeholder="Enter group name"
                     onChange={(e) => setGroupName(e.target.value)}
                     required
+                    disabled={isSubmitting}
                 />
 
                 <label htmlFor="group-users">Select Members:</label>
-                <select
-                    id="group-users"
-                    multiple
-                    value={selectedUserEmails}
-                    onChange={handleUserSelect}
-                >
-                    {users.map(user => (
-                        <option key={user.email} value={user.email}>
-                            {user.name} ({user.email})
-                        </option>
-                    ))}
-                </select>
+                {validUsers.length === 0 ? (
+                    <p><em>No users available. Add users before creating a group.</em></p>
+                ) : (
+                    <select
+                        id="group-users"
+                        multiple
+                        value={selectedUserEmails}
+                        onChange={handleUserSelect}
+                        disabled={isSubmitting}
+                    >
+                        {validUsers.map(user => (
+                            <option key={user.email} value={user.email}>
+                                {user.name} ({user.email})
+                            </option>
+                        ))}
+                    </select>
+                )}
 
                 <label htmlFor="group-status">Group Status:</label>
                 <select
@@ -61,13 +96,22 @@ function GroupForm({ onGroupCreated, users }) {
                     value={status}
                     onChange={(e) => setStatus(e.target.value)}
                     required
+                    disabled={isSubmitting}
                 >
                     <option value="active">🟢 Active</option>
                     <option value="in progress">🟡 In Progress</option>
                     <option value="settled">⚪ Settled</option>
                 </select>
 
-                <button type="submit" className="button-primary">Create Group</button>
+                {error && <p style={{ color: 'red' }}><strong>{error}</strong></p>}
+
+                <button
+                    type="submit"
+                    className="button-primary"
+                    disabled={validUsers.length === 0 || isSubmitting}
+                >
+                    {isSubmitting ? 'Creating…' : 'Create Group'}
+                </button>
             </form>
         </section>
     );

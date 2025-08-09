@@ -5,11 +5,13 @@ export default function Account() {
     const [user, setUser] = useState(null);
     const [lastLogin, setLastLogin] = useState('');
     const [message, setMessage] = useState('');
+    const [welcomeMessage, setWelcomeMessage] = useState('');
 
     useEffect(() => {
         const fetchUserAndSession = async () => {
             const { data: userData } = await supabase.auth.getUser();
-            setUser(userData?.user || null);
+            const currentUser = userData?.user || null;
+            setUser(currentUser);
 
             const { data: sessionData } = await supabase.auth.getSession();
             const loginTime = sessionData?.session?.created_at;
@@ -19,6 +21,42 @@ export default function Account() {
                     timeStyle: 'short'
                 });
                 setLastLogin(formatted);
+            }
+
+            // 🔥 Check for pending invite
+            if (currentUser?.email) {
+                const { data: invite, error: inviteError } = await supabase
+                    .from('invites')
+                    .select('*')
+                    .eq('email', currentUser.email)
+                    .eq('status', 'pending')
+                    .single();
+
+                if (invite && !inviteError) {
+                    const name = currentUser.user_metadata?.full_name || 'New User';
+
+                    // Add to members
+                    await supabase.from('members').insert({
+                        user_id: currentUser.id,
+                        name,
+                        email: currentUser.email
+                    });
+
+                    // Add to group_members
+                    await supabase.from('group_members').insert({
+                        group_id: invite.group_id,
+                        name,
+                        email: currentUser.email
+                    });
+
+                    // Update invite status
+                    await supabase
+                        .from('invites')
+                        .update({ status: 'accepted' })
+                        .eq('id', invite.id);
+
+                    setWelcomeMessage(`You've been added to a group! Welcome to "${invite.group_id}".`);
+                }
             }
         };
 
@@ -44,6 +82,18 @@ export default function Account() {
 
     return (
         <div style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
+            {welcomeMessage && (
+                <div style={{
+                    backgroundColor: '#e6f7ff',
+                    padding: '1rem',
+                    borderRadius: '6px',
+                    marginBottom: '1.5rem',
+                    color: '#005580'
+                }}>
+                    🎉 {welcomeMessage}
+                </div>
+            )}
+
             <div style={{
                 background: '#f9f9f9',
                 padding: '1.5rem',

@@ -14,33 +14,24 @@ import Terms from './pages/Terms';
 import GroupForm from './components/GroupForm';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import { getUsers, saveUsers } from './utils/storage';
 import Account from './pages/Account';
 
 import './App.css';
 
 function App() {
-    const [users, setUsers] = useState(null);
     const [session, setSession] = useState(null);
-    const isLoading = users === null;
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    // Load users from local storage
+    // Session listener
     useEffect(() => {
-        const savedUsers = getUsers();
-        setUsers(savedUsers);
-    }, []);
-
-    useEffect(() => {
-        if (users) {
-            saveUsers(users);
-        }
-    }, [users]);
-
-    // Supabase session listener
-    useEffect(() => {
-        supabase.auth.getSession().then(({ data: { session } }) => {
+        const initSession = async () => {
+            const { data: { session } } = await supabase.auth.getSession();
             setSession(session);
-        });
+        };
+
+        initSession();
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             setSession(session);
@@ -48,6 +39,31 @@ function App() {
 
         return () => subscription.unsubscribe();
     }, []);
+
+    // Load users from Supabase
+    useEffect(() => {
+        const fetchUsers = async () => {
+            if (!session) return;
+
+            try {
+                const { data, error } = await supabase
+                    .from('members')
+                    .select('*')
+                    .order('created_at', { ascending: true });
+
+                if (error) throw error;
+
+                setUsers(Array.isArray(data) ? data : []);
+            } catch (err) {
+                console.error('Error loading users:', err.message);
+                setError('Failed to load users.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUsers();
+    }, [session]);
 
     if (!session) {
         return (
@@ -61,6 +77,26 @@ function App() {
         );
     }
 
+    if (loading) {
+        return (
+            <main className="main-content">
+                <p style={{ padding: '2rem', textAlign: 'center' }}>
+                    <em>Loading users…</em>
+                </p>
+            </main>
+        );
+    }
+
+    if (error) {
+        return (
+            <main className="main-content">
+                <p style={{ padding: '2rem', textAlign: 'center', color: 'red' }}>
+                    {error}
+                </p>
+            </main>
+        );
+    }
+
     return (
         <HashRouter>
             <div className="app-container">
@@ -68,21 +104,17 @@ function App() {
 
                 <main className="main-content">
                     <Routes>
-                        {!isLoading && (
-                            <>
-                                <Route path="/" element={<Home users={users} />} />
-                                <Route
-                                    path="/create-user"
-                                    element={<UserForm setUsers={setUsers} users={users} />}
-                                />
-                                <Route
-                                    path="/create-group"
-                                    element={<GroupForm users={users} />}
-                                />
-                                <Route path="/view-users" element={<UserList users={users} />} />
-                                <Route path="/group/:name" element={<GroupDetail />} />
-                            </>
-                        )}
+                        <Route path="/" element={<Home users={users} />} />
+                        <Route
+                            path="/create-user"
+                            element={<UserForm setUsers={setUsers} users={users} />}
+                        />
+                        <Route
+                            path="/create-group"
+                            element={<GroupForm users={users} />}
+                        />
+                        <Route path="/view-users" element={<UserList users={users} />} />
+                        <Route path="/group/:name" element={<GroupDetail />} />
                         <Route path="/summary" element={<Summary />} />
                         <Route path="/privacy" element={<Privacy />} />
                         <Route path="/terms" element={<Terms />} />
