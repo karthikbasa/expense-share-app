@@ -1,25 +1,42 @@
+/* === Footer Styles — Mobile-First Refined === */
+
 .footer {
-    padding: 1rem;
+    padding: 1.25rem 1rem;
     background-color: var(--card-bg);
     color: var(--text-color);
     text-align: center;
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     border-top: 1px solid #ccc;
 }
 
+/* Footer content layout */
 .footer-content {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+/* Footer links */
+.footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
 .footer-links a {
-    margin: 0 0.5rem;
     color: var(--text-color);
     text-decoration: none;
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
 }
 
 .footer-links a:hover {
     text-decoration: underline;
+    background-color: rgba(0, 0, 0, 0.03);
 }
