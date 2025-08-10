@@ -36,36 +36,47 @@ function UserForm({ setUsers, users }) {
 
         setUsers(updatedUsers);
 
-        // 🔄 Insert or update in members table
+        // 📨 Step 1: Create invite first
+        const { data: authData, error: authError } = await supabase.auth.getUser();
+        const currentUserId = authData?.user?.id;
+
+        if (authError || !currentUserId) {
+            console.warn('⚠️ Could not fetch authenticated user for invite.');
+            setMessage('⚠️ Failed to fetch current user.');
+            return;
+        }
+
+        const { error: inviteError } = await supabase
+            .from('invites')
+            .insert({
+                email: trimmedEmail,
+                invited_by: currentUserId,
+                status: 'pending'
+            });
+
+        if (inviteError) {
+            console.error('❌ Error inserting invite:', inviteError);
+            setMessage('❌ Failed to create invite.');
+            return;
+        }
+
+        // 👥 Step 2: Insert into members (after invite exists)
         const { error: memberError } = await supabase
             .from('members')
-            .upsert({ name, email }, { onConflict: ['email'] });
+            .upsert(
+                {
+                    name,
+                    email: trimmedEmail,
+                    user_id: null // invited user hasn't signed up yet
+                    // group_id: optional, if required
+                },
+                { onConflict: ['email'] }
+            );
 
         if (memberError) {
             console.error('❌ Error inserting into members:', memberError);
-            setMessage('❌ Failed to save user to database.');
-        }
-
-        // 📨 Optional: Create invite
-        const {
-            data: { user: currentUser },
-            error: authError
-        } = await supabase.auth.getUser();
-
-        if (authError || !currentUser) {
-            console.warn('⚠️ Could not fetch authenticated user for invite.');
-        } else {
-            const { error: inviteError } = await supabase
-                .from('invites')
-                .insert({
-                    email: trimmedEmail,
-                    invited_by: currentUser.id,
-                    status: 'pending'
-                });
-
-            if (inviteError) {
-                console.error('❌ Error inserting invite:', inviteError);
-            }
+            setMessage('❌ Failed to save user to members table.');
+            return;
         }
 
         setName('');

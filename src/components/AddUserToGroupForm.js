@@ -20,6 +20,31 @@ function AddUserToGroupForm({ group, allUsers, onUpdate }) {
         setIsSubmitting(true);
 
         try {
+            // 🔐 Get current authenticated user
+            const { data: authData, error: authError } = await supabase.auth.getUser();
+            const currentUserEmail = authData?.user?.email;
+
+            if (authError || !currentUserEmail) {
+                console.warn('⚠️ Could not fetch authenticated user.');
+                setError('Failed to identify current user.');
+                return;
+            }
+
+            // 🔍 Get current user's member.id
+            const { data: currentMember, error: memberLookupError } = await supabase
+                .from('members')
+                .select('id')
+                .eq('email', currentUserEmail)
+                .single();
+
+            if (memberLookupError || !currentMember) {
+                console.warn('⚠️ Current user not found in members table.');
+                setError('Current user is not registered as a member.');
+                return;
+            }
+
+            const addedById = currentMember.id;
+
             const newUsers = safeAllUsers.filter(
                 (u) =>
                     selectedEmails.includes(u.email) &&
@@ -38,10 +63,10 @@ function AddUserToGroupForm({ group, allUsers, onUpdate }) {
 
             await saveGroups(updatedGroups);
 
-            // 🔄 Update Supabase group_members
+            // 🔄 Fetch member records for selected emails
             const { data: memberRecords, error: memberFetchError } = await supabase
                 .from('members')
-                .select('id, email')
+                .select('id, email, name')
                 .in('email', selectedEmails);
 
             if (memberFetchError) {
@@ -51,15 +76,26 @@ function AddUserToGroupForm({ group, allUsers, onUpdate }) {
             }
 
             const memberMap = Object.fromEntries(
-                memberRecords.map((m) => [m.email.toLowerCase(), m.id])
+                memberRecords.map((m) => [
+                    m.email.toLowerCase(),
+                    { id: m.id, name: m.name, email: m.email }
+                ])
             );
 
             const groupId = group.id;
 
             const groupMemberPayload = selectedEmails
                 .map((email) => {
-                    const memberId = memberMap[email.toLowerCase()];
-                    return memberId ? { group_id: groupId, member_id: memberId } : null;
+                    const member = memberMap[email.toLowerCase()];
+                    return member
+                        ? {
+                            group_id: groupId,
+                            member_id: member.id,
+                            name: member.name || 'Invited User',
+                            email: member.email,
+                            added_by: addedById // ✅ valid FK reference
+                        }
+                        : null;
                 })
                 .filter(Boolean);
 

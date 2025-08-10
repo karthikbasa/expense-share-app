@@ -36,23 +36,37 @@ export async function getGroups() {
 
 // Save a new group with complete structure + invites
 export async function addGroup(name, users = [], status = 'active') {
-    // Step 1: Create the group
-    const { data: groupData, error: groupError } = await supabase
-        .from('groups')
-        .insert([{ name, status }])
-        .select();
+    // 🔐 Step 0: Get current authenticated user
+    const {
+        data: { user: currentUser },
+        error: authError
+    } = await supabase.auth.getUser();
 
-    if (groupError || !groupData?.length) {
-        console.error('Error creating group:', groupError);
+    if (authError || !currentUser) {
+        console.error('Failed to get authenticated user:', authError);
         return null;
     }
 
-    const groupId = groupData[0].id;
+    const currentUserEmail = currentUser.email;
 
-    // Step 2: Fetch full user details from 'members' table using emails
+    // 🔍 Step 1: Resolve member.id from current user's email
+    const { data: currentMember, error: memberLookupError } = await supabase
+        .from('members')
+        .select('id, name, email')
+        .eq('email', currentUserEmail)
+        .single();
+
+    if (memberLookupError || !currentMember) {
+        console.error('Current user not found in members table:', memberLookupError);
+        return null;
+    }
+
+    const createdBy = currentMember.id;
+
+    // 🔍 Step 2: Fetch full user details from 'members' table using emails
     const { data: fullUsers, error: fetchError } = await supabase
         .from('members')
-        .select('name, email')
+        .select('id, name, email')
         .in('email', users);
 
     if (fetchError) {
@@ -62,46 +76,69 @@ export async function addGroup(name, users = [], status = 'active') {
     const existingEmails = Array.isArray(fullUsers) ? fullUsers.map(u => u.email) : [];
     const pendingEmails = users.filter(email => !existingEmails.includes(email));
 
-    // Step 3: Insert confirmed members into group_members
+    // 🧱 Step 3: Create the group with created_by
+    const { data: groupData, error: groupError } = await supabase
+        .from('groups')
+        .insert([{ name, status, created_by: createdBy }])
+        .select();
+
+    if (groupError || !groupData?.length) {
+        console.error('Error creating group:', groupError);
+        return null;
+    }
+
+    const groupId = groupData[0].id;
+
+    // 👥 Step 4: Insert confirmed members into group_members
+    const memberPayload = [];
+
+    // Add creator as a member
+    memberPayload.push({
+        group_id: groupId,
+        member_id: currentMember.id,
+        name: currentMember.name,
+        email: currentMember.email,
+        added_by: createdBy
+    });
+
+    // Add other confirmed members
     if (fullUsers?.length) {
-        const memberPayload = fullUsers.map((u) => ({
-            group_id: groupId,
-            name: u.name,
-            email: u.email
-        }));
-
-        const { error: memberError } = await supabase
-            .from('group_members')
-            .insert(memberPayload);
-
-        if (memberError) {
-            console.error('Error adding members:', memberError);
+        for (const u of fullUsers) {
+            if (u.email !== currentUserEmail) {
+                memberPayload.push({
+                    group_id: groupId,
+                    member_id: u.id,
+                    name: u.name,
+                    email: u.email,
+                    added_by: createdBy
+                });
+            }
         }
     }
 
-    // Step 4: Insert pending invites
+    const { error: memberError } = await supabase
+        .from('group_members')
+        .insert(memberPayload);
+
+    if (memberError) {
+        console.error('Error adding members:', memberError);
+    }
+
+    // 📨 Step 5: Insert pending invites
     if (pendingEmails.length > 0) {
-        const {
-            data: { user: currentUser },
-            error: authError
-        } = await supabase.auth.getUser();
+        const invitePayload = pendingEmails.map(email => ({
+            email,
+            invited_by: currentUser.id,
+            group_id: groupId,
+            status: 'pending'
+        }));
 
-        if (authError || !currentUser) {
-            console.warn('Could not fetch authenticated user for invites.');
-        } else {
-            const invitePayload = pendingEmails.map(email => ({
-                email,
-                invited_by: currentUser.id,
-                group_id: groupId
-            }));
+        const { error: inviteError } = await supabase
+            .from('invites')
+            .insert(invitePayload);
 
-            const { error: inviteError } = await supabase
-                .from('invites')
-                .insert(invitePayload);
-
-            if (inviteError) {
-                console.error('Error creating invites:', inviteError);
-            }
+        if (inviteError) {
+            console.error('Error creating invites:', inviteError);
         }
     }
 
@@ -111,8 +148,8 @@ export async function addGroup(name, users = [], status = 'active') {
 // Load all users (across all groups)
 export async function getUsers() {
     const { data, error } = await supabase
-        .from('group_members')
-        .select('*');
+        .from('members')
+        .select('*'); // includes invited users with user_id = null
 
     if (error) {
         console.error('Error fetching users:', error);
