@@ -31,7 +31,7 @@ function ExpenseForm({ group, onExpenseAdded }) {
             const expense = {
                 title: trimmedTitle,
                 amount: parsedAmount,
-                paid_by: paidBy
+                paid_by: paidByName
             };
 
             // ✅ Pass group.id instead of group.name
