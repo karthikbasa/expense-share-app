@@ -8,7 +8,12 @@ function Home({ users }) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        setGroups(getGroups());
+        const loadGroups = async () => {
+            const fetchedGroups = await getGroups();
+            setGroups(Array.isArray(fetchedGroups) ? fetchedGroups : []);
+        };
+
+        loadGroups();
     }, []);
 
     return (
@@ -33,18 +38,23 @@ function Home({ users }) {
 
             <section className="card">
                 <h2>All Users</h2>
-                {users.length === 0 ? (
-                    <p>No users added yet.</p>
+                {Array.isArray(users) ? (
+                    users.length === 0 ? (
+                        <p><em>No users added yet.</em></p>
+                    ) : (
+                        <ul>
+                            {users.map((user, index) => (
+                                <li key={index}>
+                                    <strong>{user.name}</strong> – {user.email}
+                                </li>
+                            ))}
+                        </ul>
+                    )
                 ) : (
-                    <ul>
-                        {users.map((user, index) => (
-                            <li key={index}>
-                                <strong>{user.name}</strong> – {user.email}
-                            </li>
-                        ))}
-                    </ul>
+                    <p><em>Loading users…</em></p>
                 )}
             </section>
+
         </div>
     );
 }

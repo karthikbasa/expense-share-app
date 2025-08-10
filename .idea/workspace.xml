@@ -5,11 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bcda1f29-d18e-4f45-b302-bb39c860ad60" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/db/ddls/ddl.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/db/policies/expenses.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/db/policies/group_members.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/db/policies/groups.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/db/policies/members.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Footer.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Footer.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Header.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/Global.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/Global.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AddUserToGroupForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddUserToGroupForm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/UserForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/UserForm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/UserList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/UserList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/storage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/storage.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,7 +38,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;supadb&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/nirvana/IdeaProjects/expense-share-app/src/assets&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -77,6 +82,9 @@
       <workItem from="1754540000520" duration="1664000" />
       <workItem from="1754573383369" duration="599000" />
       <workItem from="1754623764440" duration="1312000" />
+      <workItem from="1754743870930" duration="2204000" />
+      <workItem from="1754759547972" duration="2575000" />
+      <workItem from="1754787899321" duration="13681000" />
     </task>
     <servers />
   </component>
