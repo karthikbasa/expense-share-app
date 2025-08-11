@@ -24,3 +24,17 @@ WITH CHECK (
       AND invites.email = members.email
   )
 );
+
+CREATE POLICY "Inviter can delete member only if invite is pending"
+ON members
+FOR DELETE
+USING (
+  EXISTS (
+    SELECT 1
+    FROM invites
+    WHERE invites.email = members.email
+      AND invites.invited_by = auth.uid()
+      AND invites.status = 'pending'
+  )
+  AND members.user_id IS NULL
+);

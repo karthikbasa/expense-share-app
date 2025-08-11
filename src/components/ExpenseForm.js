@@ -25,13 +25,13 @@ function ExpenseForm({ group, onExpenseAdded }) {
         setIsSubmitting(true);
 
         try {
-            const paidUser = safeUsers.find(u => u.email === paidBy);
-            const paidByName = paidUser?.name || paidBy;
+            //const paidUser = safeUsers.find(u => u.email === paidBy);
+            //const paidByName = paidUser?.name || paidBy;
 
             const expense = {
                 title: trimmedTitle,
                 amount: parsedAmount,
-                paid_by: paidByName
+                paid_by: paidBy
             };
 
             // ✅ Pass group.id instead of group.name

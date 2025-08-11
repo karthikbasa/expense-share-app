@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="bcda1f29-d18e-4f45-b302-bb39c860ad60" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/db/policies/members.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/db/policies/members.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/UserForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/UserForm.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +77,7 @@
       <workItem from="1754623764440" duration="1312000" />
       <workItem from="1754743870930" duration="2204000" />
       <workItem from="1754759547972" duration="2575000" />
-      <workItem from="1754787899321" duration="14353000" />
+      <workItem from="1754787899321" duration="17490000" />
     </task>
     <servers />
   </component>

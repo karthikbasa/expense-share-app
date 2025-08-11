@@ -83,16 +83,36 @@ function UserForm({ setUsers, users }) {
         setEmail('');
     };
 
-    const handleDeleteUser = (emailToDelete) => {
-        if (window.confirm(`Are you sure you want to delete ${emailToDelete}?`)) {
-            const validUsers = Array.isArray(users) ? users : [];
-            const updatedUsers = validUsers.filter(
-                (user) => user.email.trim().toLowerCase() !== emailToDelete.trim().toLowerCase()
-            );
-            setUsers(updatedUsers);
-            setMessage(`🗑️ Deleted user: ${emailToDelete}`);
+    const handleDeleteUser = async (emailToDelete) => {
+        if (!window.confirm(`Are you sure you want to delete ${emailToDelete}?`)) return;
+
+        const { error } = await supabase
+            .from('members')
+            .delete()
+            .eq('email', emailToDelete.trim().toLowerCase());
+
+        if (error) {
+            // Check for foreign key violation
+            const isFKError = error.message.includes('violates foreign key constraint');
+
+            if (isFKError) {
+                setMessage(`⚠️ Cannot delete ${emailToDelete}: user is part of one or more groups.`);
+            } else {
+                setMessage(`❌ Failed to delete user: ${emailToDelete}`);
+            }
+
+            console.error('Delete error:', error.message);
+            return;
         }
+
+        const validUsers = Array.isArray(users) ? users : [];
+        const updatedUsers = validUsers.filter(
+            (user) => user.email.trim().toLowerCase() !== emailToDelete.trim().toLowerCase()
+        );
+        setUsers(updatedUsers);
+        setMessage(`🗑️ Deleted user: ${emailToDelete}`);
     };
+
 
     const validUsers = Array.isArray(users) ? users : [];
 
