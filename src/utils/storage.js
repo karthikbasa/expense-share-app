@@ -143,7 +143,7 @@ export async function addGroup(name, users = [], status = 'active') {
     }
 
     return groupData[0];
-id}
+}
 
 // Load all users (across all groups)
 export async function getUsers() {
