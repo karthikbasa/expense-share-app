@@ -8,12 +8,12 @@ export async function handlePostSignup() {
 
     if (authError || !user) {
         console.error("❌ Failed to get signed-up user:", authError);
-        return;
+        return { success: false };
     }
 
     const email = user.email;
-    const name = user.user_metadata?.full_name || 'New User';
 
+    // 🔍 Step 1: Find pending invite
     const { data: invite, error: inviteError } = await supabase
         .from('invites')
         .select('*')
@@ -23,43 +23,24 @@ export async function handlePostSignup() {
 
     if (inviteError || !invite) {
         console.log("✅ No pending invite found for:", email);
-        return;
+        return { success: false };
     }
 
-    const { error: memberError } = await supabase
-        .from('members')
-        .insert({
-            user_id: user.id,
-            name,
-            email
-        });
-
-    if (memberError) {
-        console.error("❌ Failed to create member:", memberError);
-        return;
-    }
-
-    const { error: groupMemberError } = await supabase
-        .from('group_members')
-        .insert({
-            group_id: invite.group_id,
-            name,
-            email
-        });
-
-    if (groupMemberError) {
-        console.error("❌ Failed to add user to group:", groupMemberError);
-        return;
-    }
-
-    const { error: updateError } = await supabase
+    // ✅ Step 2: Mark invite as accepted
+    const { error: inviteUpdateError } = await supabase
         .from('invites')
         .update({ status: 'accepted' })
         .eq('id', invite.id);
 
-    if (updateError) {
-        console.error("❌ Failed to update invite status:", updateError);
-    } else {
-        console.log(`🎉 ${email} accepted invite to group ${invite.group_id}`);
+    if (inviteUpdateError) {
+        console.error("❌ Failed to update invite status:", inviteUpdateError);
+        return { success: false };
     }
+
+    console.log(`🎉 ${email} accepted invite from ${invite.invited_by}`);
+
+    return {
+        success: true,
+        message: `You've accepted your invite to Splitzy!`
+    };
 }
