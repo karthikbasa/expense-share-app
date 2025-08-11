@@ -71,8 +71,10 @@ function App() {
                 <Auth
                     supabaseClient={supabase}
                     appearance={{ theme: ThemeSupa }}
-                    providers={['google', 'github']}
+                    providers={[]}
                 />
+                <p style={{ textAlign: 'center', marginTop: '1rem', fontSize: '0.9rem' }}>
+                </p>
             </div>
         );
     }
