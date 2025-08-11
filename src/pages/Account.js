@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../supabaseClient';
+import { handlePostSignup } from '../utils/inviteHandler';
 
 export default function Account() {
     const [user, setUser] = useState(null);
@@ -23,40 +24,10 @@ export default function Account() {
                 setLastLogin(formatted);
             }
 
-            // 🔥 Check for pending invite
-            if (currentUser?.email) {
-                const { data: invite, error: inviteError } = await supabase
-                    .from('invites')
-                    .select('*')
-                    .eq('email', currentUser.email)
-                    .eq('status', 'pending')
-                    .maybeSingle();
-
-                if (invite && !inviteError) {
-                    const name = currentUser.user_metadata?.full_name || 'New User';
-
-                    // Add to members
-                    await supabase.from('members').insert({
-                        user_id: currentUser.id,
-                        name,
-                        email: currentUser.email
-                    });
-
-                    // Add to group_members
-                    await supabase.from('group_members').insert({
-                        group_id: invite.group_id,
-                        name,
-                        email: currentUser.email
-                    });
-
-                    // Update invite status
-                    await supabase
-                        .from('invites')
-                        .update({ status: 'accepted' })
-                        .eq('id', invite.id);
-
-                    setWelcomeMessage(`You've been added to a group! Welcome to "${invite.group_id}".`);
-                }
+            // ✨ Handle invite logic via shared handler
+            const result = await handlePostSignup();
+            if (result?.success && result.message) {
+                setWelcomeMessage(result.message);
             }
         };
 

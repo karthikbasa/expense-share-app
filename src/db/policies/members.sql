@@ -4,15 +4,25 @@ CREATE POLICY "Members can view themselves"
   FOR SELECT
                       USING (user_id = auth.uid());
 
-CREATE POLICY "Members can update themselves"
-  ON members
-  FOR UPDATE
-                 USING (user_id = auth.uid());
-
 CREATE POLICY "Members can delete themselves"
   ON members
   FOR DELETE
 USING (user_id = auth.uid());
+
+CREATE POLICY "User can update their member record or claim invite"
+  ON members
+  FOR UPDATE
+                 USING (
+                 -- Already claimed
+                 user_id = auth.uid()
+
+                 -- Or claiming invite
+                 OR (
+                 email = auth.email()
+                 AND user_id IS NULL
+                 )
+                 );
+
 
 CREATE POLICY "Inviter can insert members they invited"
 ON members
